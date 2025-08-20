@@ -1,0 +1,10 @@
+{
+  "context": {
+    "applicationName": "todo-application",
+    "region": "us-east-1",
+    "accountId": "654654588816",
+    "springProfile": "aws",
+    "environmentName": "staging",
+    "dockerImageUrl": "docker.io/avijitchatterjee/todo-application-v1:latest"
+  }
+}
