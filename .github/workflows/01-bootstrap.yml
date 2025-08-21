@@ -28,6 +28,9 @@ jobs:
           java-version: 17
           cache: 'maven'
 
+      - name: Make mvnw executable
+        run: chmod +x ./cdk/mvnw
+
       - name: NPM install
         working-directory: cdk
         run: npm install
