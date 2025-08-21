@@ -33,6 +33,9 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
+      - name: Make gradlew executable
+        run: chmod +x ./todo-application/gradlew
+
       - name: Build application
         working-directory: todo-application
         run: ./gradlew build --stacktrace
