@@ -21,21 +21,23 @@ repositories {
 ext {
   set('awsSpringVersion', '3.4.0')
   set('testcontainersVersion', '1.21.3')
+  set('bootstrapVersion', '5.3.7')
+  set('fontAwesomeVersion', '7.0.0')
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'com.google.code.findbugs:jsr305:3.0.2'
-	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-	implementation 'org.webjars:webjars-locator-core'
-	implementation 'org.webjars:bootstrap:5.3.7'
-	implementation 'org.webjars:font-awesome:7.0.0'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter'
+	implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+	implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity6"
+	implementation "org.springframework.boot:spring-boot-starter-validation"
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
+	implementation "org.webjars:webjars-locator-core"
+	implementation "org.webjars:bootstrap:${bootstrapVersion}"
+	implementation "org.webjars:font-awesome:${fontAwesomeVersion}"
+	developmentOnly "org.springframework.boot:spring-boot-devtools"
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
 
 dependencyManagement {
