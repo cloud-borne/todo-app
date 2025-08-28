@@ -1,0 +1,19 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres:12.9
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=tech-learn-hub-user
+      - POSTGRES_PASSWORD=tech-learn-hub-pwd
+      - POSTGRES_DB=local-todo-app-db
+  localstack:
+    image: localstack/localstack:4.7.0
+    ports:
+      - 4566:4566
+    environment:
+      - SERVICES=sqs,ses,dynamodb
+    volumes:
+      - ./src/test/resources/localstack/local-aws-infrastructure.sh:/docker-entrypoint-initaws.d/init.sh

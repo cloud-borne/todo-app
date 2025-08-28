@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: application
+  cloud:
+    aws:
+      region:
+        static: us-east-1

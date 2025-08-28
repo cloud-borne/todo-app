@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    aws:
+      credentials:
+        access-key: foo
+        secret-key: bar
+      endpoint: http://localhost:4566

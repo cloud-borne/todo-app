@@ -34,10 +34,10 @@ jobs:
           cache: 'gradle'
 
       - name: Make gradlew executable
-        run: chmod +x ./todo-application/gradlew
+        run: chmod +x ./application/gradlew
 
       - name: Build application
-        working-directory: todo-application
+        working-directory: application
         run: ./gradlew build --stacktrace
 
       - name: Zip build reports
@@ -59,7 +59,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         env:
           DOCKER_IMAGE_TAG: ${{ steps.dockerImageTag.outputs.tag }}
-        working-directory: todo-application
+        working-directory: application
         run: |
           docker build -t todo-application .
           docker tag todo-application ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/todo-application:${DOCKER_IMAGE_TAG}
