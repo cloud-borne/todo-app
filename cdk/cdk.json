@@ -2,12 +2,12 @@
   "context": {
     "applicationName": "todo-application",
     "region": "us-east-1",
-    "accountId": "891377192164",
+    "accountId": "972220609323",
     "springProfile": "aws",
     "environmentName": "staging",
     "dockerImageUrl": "docker.io/avijitchatterjee/todo-application:latest",
     "hostedZoneDomain": "tech-learning-hub.site",
     "applicationDomain": "app.tech-learning-hub.site",
-    "sslCertificateArn": "arn:aws:acm:us-east-1:891377192164:certificate/48c1605c-5e5f-4d35-88c3-a5291b46d849"
+    "sslCertificateArn": "arn:aws:acm:us-east-1:972220609323:certificate/48c1605c-5e5f-4d35-88c3-a5291b46d849"
   }
 }
