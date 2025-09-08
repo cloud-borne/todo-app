@@ -28,18 +28,6 @@ jobs:
           role-session-name: GitHubActions-Backend-${{ github.run_id }}
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
-      - name: Request OIDC token
-        id: get_token
-        run: |
-          echo "Fetching OIDC token..."
-          TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_RUNTIME_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r '.value')
-          echo "OIDC_TOKEN=$TOKEN" >> $GITHUB_ENV
-
-      - name: Inspect OIDC token claims
-        run: |
-          echo "Decoded OIDC token claims:"
-          echo "$OIDC_TOKEN" | cut -d '.' -f2 | base64 --decode | jq
-
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
