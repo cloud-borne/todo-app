@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  Creates an IAM OIDC provider for GitHub Actions and a role with a custom inline policy
+  that replicates permissions from 15 AWS managed policies. Access is restricted to the main branch.
+
+Parameters:
+  GitHubOrgUser:
+    Description: Name of GitHub organization/user (case sensitive)
+    Type: String
+
+  RepositoryName:
+    Description: Name of GitHub repository (case sensitive)
+    Type: String
+
+  OIDCAudience:
+    Description: Audience supplied to configure-aws-credentials.
+    Type: String
+    Default: "sts.amazonaws.com"
+
+  GitHubOIDCThumbprint:
+    Description: SHA-1 thumbprint of GitHub OIDC provider certificate
+    Type: String
+    Default: "7560D6F40FA55195F740EE2B1B7C0B4836CBE103"
+
+Resources:
+  GithubOidc:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - !Ref OIDCAudience
+      ThumbprintList:
+        - !Ref GitHubOIDCThumbprint
+
+  GitHubActionsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRoleWithWebIdentity
+            Principal:
+              Federated: !Ref GithubOidc
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: !Ref OIDCAudience
+                token.actions.githubusercontent.com:iss: "https://token.actions.githubusercontent.com"
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrgUser}/${RepositoryName}:ref:refs/heads/main
+      Policies:
+        - PolicyName: GitHubActionsCompositePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - rds:*
+                  - ec2:*
+                  - ecr:*
+                  - ecs:*
+                  - acm:*
+                  - lambda:*
+                  - cloudformation:*
+                  - cognito-idp:*
+                  - s3:*
+                  - ssm:*
+                  - iam:Get*
+                  - iam:List*
+                  - kms:*
+                  - mq:*
+                  - synthetics:*
+                  - cloudwatch:*
+                Resource: "*"
+
+Outputs:
+  RoleArn:
+    Description: IAM Role ARN for GitHub Actions
+    Value: !GetAtt GitHubActionsRole.Arn
+
+  OIDCProviderArn:
+    Description: OIDC Provider ARN
+    Value: !Ref GithubOidc
