@@ -45,9 +45,9 @@ Resources:
             Condition:
               StringEquals:
                 token.actions.githubusercontent.com:aud: !Ref OIDCAudience
-                token.actions.githubusercontent.com:iss: "https://token.actions.githubusercontent.com"
               StringLike:
-                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrgUser}/${RepositoryName}:ref:refs/heads/main
+                token.actions.githubusercontent.com:sub: !Sub "repo:${GitHubOrgUser}/${RepositoryName}:ref:refs/heads/main"
+
       Policies:
         - PolicyName: GitHubActionsCompositePolicy
           PolicyDocument:
