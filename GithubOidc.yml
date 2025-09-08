@@ -1,53 +1,51 @@
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: '2010-09-09'
 Description: >
-  Creates an IAM OIDC provider for GitHub Actions and a role with a custom inline policy
-  that replicates permissions from 15 AWS managed policies. Access is restricted to the main branch.
+  CloudFormation template to set up an IAM OIDC Provider and a
+  corresponding IAM Role for GitHub Actions with an inline policy. This version uses
+  a single thumbprint.
 
 Parameters:
-  GitHubOrgUser:
-    Description: Name of GitHub organization/user (case sensitive)
+  GitHubOrganization:
     Type: String
-
-  RepositoryName:
-    Description: Name of GitHub repository (case sensitive)
+    Description: Your GitHub organization or username (e.g., my-github-org).
+  GitHubRepository:
     Type: String
-
-  OIDCAudience:
-    Description: Audience supplied to configure-aws-credentials.
+    Description: Your GitHub repository name (e.g., my-app-repo).
+  GitHubBranch:
     Type: String
-    Default: "sts.amazonaws.com"
-
-  GitHubOIDCThumbprint:
-    Description: SHA-1 thumbprint of GitHub OIDC provider certificate
-    Type: String
-    Default: "7560D6F40FA55195F740EE2B1B7C0B4836CBE103"
+    Description: >
+      The GitHub branch that is allowed to assume this role. 
+      Use '*' to allow all branches. (e.g., main or dev).
 
 Resources:
-  GithubOidc:
+  # The OIDC Identity Provider for GitHub Actions
+  GitHubOIDCProvider:
     Type: AWS::IAM::OIDCProvider
     Properties:
       Url: https://token.actions.githubusercontent.com
       ClientIdList:
-        - !Ref OIDCAudience
+        - sts.amazonaws.com
       ThumbprintList:
-        - !Ref GitHubOIDCThumbprint
+        - "2b18947a6a9fc7764fd8b5fb18a863b0c6dac24f" # This is the single thumbprint provided by AWS Console
 
+  # The IAM Role that GitHub Actions will assume with an inline policy
   GitHubActionsRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: !Sub "github-actions-${GitHubOrganization}-${GitHubRepository}-role"
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
-            Action: sts:AssumeRoleWithWebIdentity
             Principal:
-              Federated: !Ref GithubOidc
+              Federated: !Sub "arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com"
+            Action: "sts:AssumeRoleWithWebIdentity"
             Condition:
               StringEquals:
-                token.actions.githubusercontent.com:aud: !Ref OIDCAudience
+                "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
               StringLike:
-                token.actions.githubusercontent.com:sub: !Sub "repo:${GitHubOrgUser}/${RepositoryName}:ref:refs/heads/main"
-
+                "token.actions.githubusercontent.com:sub": !Sub "repo:${GitHubOrganization}/${GitHubRepository}:ref:refs/heads/${GitHubBranch}"
+      # The inline policy is added here using the Policies property
       Policies:
         - PolicyName: GitHubActionsCompositePolicy
           PolicyDocument:
@@ -74,10 +72,8 @@ Resources:
                 Resource: "*"
 
 Outputs:
-  RoleArn:
-    Description: IAM Role ARN for GitHub Actions
+  GitHubActionsRoleArn:
+    Description: ARN of the IAM role for GitHub Actions.
     Value: !GetAtt GitHubActionsRole.Arn
-
-  OIDCProviderArn:
-    Description: OIDC Provider ARN
-    Value: !Ref GithubOidc
+    Export:
+      Name: !Sub "GitHubActionsRoleArn-${GitHubOrganization}-${GitHubRepository}"
