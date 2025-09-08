@@ -16,6 +16,10 @@ Parameters:
     Description: >
       The GitHub branch that is allowed to assume this role. 
       Use '*' to allow all branches. (e.g., main or dev).
+  DomainName:
+    Type: String
+    Description: The domain name for the Route 53 hosted zone.
+    Default: tech-learning-hub.site
 
 Resources:
   # The OIDC Identity Provider for GitHub Actions

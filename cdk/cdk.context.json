@@ -26,5 +26,9 @@
   "hosted-zone:account=891377192164:domainName=tech-learning-hub.site:region=us-east-1": {
     "Id": "/hostedzone/Z01081012TXF3AJR5JI63",
     "Name": "tech-learning-hub.site."
+  },
+  "hosted-zone:account=510884921152:domainName=tech-learning-hub.site:region=us-east-1": {
+    "Id": "/hostedzone/Z02386253IR0YWOJR4R6Z",
+    "Name": "tech-learning-hub.site."
   }
 }
