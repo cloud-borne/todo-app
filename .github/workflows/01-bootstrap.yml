@@ -33,6 +33,10 @@ jobs:
           role-session-name: GitHubActions-Backend-${{ github.run_id }}
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
+      - name: Inspect OIDC token
+        run: |
+          echo "${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" | base64 --decode
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
