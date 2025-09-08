@@ -65,6 +65,7 @@ Resources:
                   - ssm:*
                   - iam:Get*
                   - iam:List*
+                  - iam:CreateRole
                   - kms:*
                   - mq:*
                   - synthetics:*
