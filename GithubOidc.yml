@@ -63,9 +63,7 @@ Resources:
                   - cognito-idp:*
                   - s3:*
                   - ssm:*
-                  - iam:Get*
-                  - iam:List*
-                  - iam:CreateRole
+                  - iam:*
                   - kms:*
                   - mq:*
                   - synthetics:*
