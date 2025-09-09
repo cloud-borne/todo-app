@@ -2,10 +2,11 @@
   "context": {
     "applicationName": "todo-application",
     "region": "us-east-1",
-    "accountId": "510884921152",
+    "accountId": "495493073921",
     "springProfile": "aws",
     "environmentName": "staging",
-    "dockerImageUrl": "510884921152.dkr.ecr.us-east-1.amazonaws.com/todo-application:latest",
+    "dockerRepositoryName": "todo-application",
+    "dockerImageTag": "DYNAMICALLY_OVERRIDDEN_BY_WORKFLOW",
     "hostedZoneDomain": "tech-learning-hub.site",
     "applicationDomain": "app.tech-learning-hub.site",
     "sslCertificateArn": "arn:aws:acm:us-east-1:510884921152:certificate/4a9e575d-250b-43a4-b171-bf338247d095"
