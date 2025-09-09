@@ -8,6 +8,6 @@
     "dockerImageUrl": "docker.io/avijitchatterjee/todo-application-v1:latest",
     "hostedZoneDomain": "tech-learning-hub.site",
     "applicationDomain": "app.tech-learning-hub.site",
-    "sslCertificateArn": "arn:aws:acm:us-east-1:510884921152:certificate/4a9e575d-250b-43a4-b171-bf338247d095"
+    "sslCertificateArn": "arn:aws:acm:us-east-1:495493073921:certificate/e3191103-38cb-44dd-b0b6-fb6dc5322dcf"
   }
 }

@@ -1,4 +1,4 @@
-package com.example.todo_application;
+package com.tech.learning.hub.application;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
