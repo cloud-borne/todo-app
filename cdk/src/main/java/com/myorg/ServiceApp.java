@@ -1,5 +1,6 @@
 package com.myorg;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,18 +52,20 @@ public class ServiceApp {
       .env(awsEnvironment)
       .build());
 
-    Service.DockerImageSource dockerImageSource = new Service.DockerImageSource(dockerImageUrl);
-    Network.NetworkOutputParameters networkOutputParameters = Network.getOutputParametersFromParameterStore(serviceStack, applicationEnvironment.getEnvironmentName());
-    Service.ServiceInputParameters serviceInputParameters = new Service.ServiceInputParameters(dockerImageSource, environmentVariables(springProfile))
-      .withHealthCheckIntervalSeconds(30);
-
     Service service = new Service(
       serviceStack,
       "Service",
       awsEnvironment,
       applicationEnvironment,
-      serviceInputParameters,
-      networkOutputParameters);
+      new Service.ServiceInputParameters(
+        new Service.DockerImageSource(dockerRepositoryName, dockerImageTag),
+        environmentVariables(
+          serviceStack,
+          springProfile))
+        .withStickySessionsEnabled(true)
+        .withHealthCheckIntervalSeconds(30), // needs to be long enough to allow for slow start up with low-end computing instances
+
+      Network.getOutputParametersFromParameterStore(serviceStack, applicationEnvironment.getEnvironmentName()));
 
     app.synth();
   }
