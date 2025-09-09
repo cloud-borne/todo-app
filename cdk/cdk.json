@@ -11,6 +11,6 @@
     "applicationDomain": "app.tech-learning-hub.site",
     "applicationUrl": "https://app.tech-learning-hub.site",
     "loginPageDomainPrefix": "staging-tech-learning-hub",
-    "sslCertificateArn": "arn:aws:acm:us-east-1:495493073921:certificate/e3191103-38cb-44dd-b0b6-fb6dc5322dcf"
+    "sslCertificateArn": "arn:aws:acm:us-east-1:490874679766:certificate/3118f138-cf1c-4dc7-aeb9-85ccb435862a"
   }
 }
