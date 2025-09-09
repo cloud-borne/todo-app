@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  CloudFormation template to set up an IAM OIDC Provider, a corresponding IAM Role,
+  and a Route 53 Hosted Zone for GitHub Actions.
+
+Parameters:
+  GitHubOrganization:
+    Type: String
+    Description: Your GitHub organization or username (e.g., my-github-org).
+  GitHubRepository:
+    Type: String
+    Description: Your GitHub repository name (e.g., my-app-repo).
+  GitHubBranch:
+    Type: String
+    Description: >
+      The GitHub branch that is allowed to assume this role. 
+      Use '*' to allow all branches. (e.g., main or dev).
+  DomainName:
+    Type: String
+    Description: The domain name for the Route 53 hosted zone.
+    Default: tech-learning-hub.site
+
+Resources:
+  # The OIDC Identity Provider for GitHub Actions
+  GitHubOIDCProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      ThumbprintList:
+        - "2b18947a6a9fc7764fd8b5fb18a863b0c6dac24f"
+
+  # The IAM Role that GitHub Actions will assume with an inline policy
+  GitHubActionsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "github-actions-${GitHubOrganization}-${GitHubRepository}-role"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub "arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com"
+            Action: "sts:AssumeRoleWithWebIdentity"
+            Condition:
+              StringEquals:
+                "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+              StringLike:
+                "token.actions.githubusercontent.com:sub": !Sub "repo:${GitHubOrganization}/${GitHubRepository}:ref:refs/heads/${GitHubBranch}"
+      Policies:
+        - PolicyName: GitHubActionsCompositePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - rds:*
+                  - ec2:*
+                  - ecr:*
+                  - ecs:*
+                  - acm:*
+                  - lambda:*
+                  - cloudformation:*
+                  - cognito-idp:*
+                  - s3:*
+                  - ssm:*
+                  - iam:*
+                  - kms:*
+                  - mq:*
+                  - synthetics:*
+                  - cloudwatch:*
+                Resource: "*"
+                
+  # The Route 53 Hosted Zone
+  Route53HostedZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: !Ref DomainName
+
+Outputs:
+  GitHubActionsRoleArn:
+    Description: ARN of the IAM role for GitHub Actions.
+    Value: !GetAtt GitHubActionsRole.Arn
+    Export:
+      Name: !Sub "GitHubActionsRoleArn-${GitHubOrganization}-${GitHubRepository}"
