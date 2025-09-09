@@ -5,7 +5,8 @@
     "accountId": "495493073921",
     "springProfile": "aws",
     "environmentName": "staging",
-    "dockerImageUrl": "docker.io/avijitchatterjee/todo-application:latest",
+    "dockerRepositoryName": "todo-application",
+    "dockerImageTag": "DYNAMICALLY_OVERRIDDEN_BY_WORKFLOW",
     "hostedZoneDomain": "tech-learning-hub.site",
     "applicationDomain": "app.tech-learning-hub.site",
     "sslCertificateArn": "arn:aws:acm:us-east-1:495493073921:certificate/e3191103-38cb-44dd-b0b6-fb6dc5322dcf"
